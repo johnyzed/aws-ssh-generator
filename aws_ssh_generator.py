@@ -105,7 +105,8 @@ def read_config_file(filename):
     return ret
 
 
-def get_instances(awskey, awssec):
+#def get_instances(awskey, awssec):
+def get_instances(profile_name):
     '''
     get all the instances from Amazon with the specific keys
     '''
@@ -114,9 +115,10 @@ def get_instances(awskey, awssec):
     for region in boto.ec2.regions():
         all_instances = []
         try:
-            conn = boto.ec2.connect_to_region(region.name, aws_access_key_id=awskey, aws_secret_access_key=awssec)
+            # conn = boto.ec2.connect_to_region(region.name, aws_access_key_id=awskey, aws_secret_access_key=awssec)
+            conn = boto.ec2.connect_to_region(region.name, profile_name=profile_name)
             all_instances = conn.get_all_instances()
-        except boto.exception.EC2ResponseError:
+        except boto.exception.EC2ResponseError as e:
             err("Got EC2ResponseError")
 
         ret += [i for r in all_instances for i in r.instances]
@@ -209,7 +211,8 @@ def main():
 
     for account, meta in settings['credentials'].iteritems():
         try:
-            instances = get_instances(meta['key'], meta['secret'])
+            # instances = get_instances(meta['key'], meta['secret'])
+            instances = get_instances(account)
         except KeyError:
             err('missing aws credentials for {0}'.format(account))
             continue

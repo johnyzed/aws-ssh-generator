@@ -17,8 +17,6 @@ __aws.json__
     },
     "credentials": {
         "company_a": {
-            "key": "AAAAAAAAAAAAAAAA",
-            "secret": "bbbbbbbbbbbbbbbbbbbbbb",
             "targets": [
                 {
                     "type": "none",
@@ -30,8 +28,6 @@ __aws.json__
             ]
         },
         "company_b": {
-            "key": "cccccccccccc",
-            "secret": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
             "targets": [
                 {
                     "type": "tag",
@@ -59,8 +55,8 @@ __aws.json__
 ```
 
 each entry under the `credentials` section represents an AWS account.
+This section corresponds to profiles available on the file .aws/credentials file.
 
-for example `company_a` uses `key` as the amazon user key and `secret` as amazon user secret.
 `targets` is a list of settings to match a specific hosts of that account, 
 if the check will result as true the settings will be used in ssh_config.
 
