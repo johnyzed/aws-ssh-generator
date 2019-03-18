@@ -206,7 +206,6 @@ def main():
 
     try:
         settings = read_config_file(config_file)
-        print(settings)
     except IOError as e:
         print('bad configuration file: {0}'.format(e))
         return 1
