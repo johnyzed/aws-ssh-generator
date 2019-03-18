@@ -31,8 +31,8 @@ def get_args():
     '''
 
     if len(sys.argv) != 2:
-        print 'syntax error'
-        print '{0} /path/to/config/file'.format(sys.argv[0])
+        print('syntax error')
+        print('{0} /path/to/config/file'.format(sys.argv[0]))
         exit(1)
 
     return sys.argv[1]
@@ -43,7 +43,8 @@ def err(msg):
     Print error message to stderr
     '''
 
-    print >> sys.stderr, msg
+    #print >> sys.stderr, msg
+    sys.stderr.write(msg)
 
 
 def print_host(data):
@@ -56,12 +57,12 @@ def print_host(data):
     alias = data.pop('alias')
     for entry in [public_entry, private_entry]:
         try:
-            print entry.format(
+            print(entry.format(
                 alias=alias, public_ip=public_ip, private_ip=private_ip
-            )
-            for key, value in data.iteritems():
-                print '    {0} {1}'.format(key, value)
-            print ''
+            ))
+            for key, value in data.items():
+                print('    {0} {1}'.format(key, value))
+            print('')
         except KeyError as e:
             err('bad host data')
             err(str(e))
@@ -161,7 +162,7 @@ def compile_instance_data(instance, account, meta, defaults):
         'keypair': instance.__dict__['key_name'],
     }
 
-    for key, value in instance.__dict__['tags'].iteritems():
+    for key, value in instance.__dict__['tags'].items():
         items['tags'][key] = value.replace(' ', '_')
 
     ret = {
@@ -185,11 +186,11 @@ def compile_instance_data(instance, account, meta, defaults):
             err('bad alias {0} missing {1}'.format(target['alias'], e.message))
             pass
 
-    for key, value in target['ssh_opts'].iteritems():
+    for key, value in target['ssh_opts'].items():
         ret.update({key: value})
 
     if 'ssh_opts' in defaults:
-        for key, value in defaults['ssh_opts'].iteritems():
+        for key, value in defaults['ssh_opts'].items():
             if not key in target['ssh_opts']:
                 ret.update({key: value})
 
@@ -205,11 +206,12 @@ def main():
 
     try:
         settings = read_config_file(config_file)
+        print(settings)
     except IOError as e:
-        print 'bad configuration file: {0}'.format(e)
+        print('bad configuration file: {0}'.format(e))
         return 1
 
-    for account, meta in settings['credentials'].iteritems():
+    for account, meta in settings['credentials'].items():
         try:
             # instances = get_instances(meta['key'], meta['secret'])
             instances = get_instances(account)
